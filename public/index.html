@@ -6,11 +6,12 @@
   <title>Vexara Life</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <div class="container">
     <h1 class="headline">
-      Indulge Your Curiosity Here
+      Indulge Your Curiosity
     </h1>
 
     <p class="subtext">
@@ -26,6 +27,90 @@
       <button class="cta-button">Enter</button>
     </div>
   </div>
+
+  <!-- =========================
+  VEXARA: "Hello there" Popup Component
+  - Independent, safe to delete later.
+  - Triggered by:
+    1) Clicking the "Enter" button
+    2) Pressing Enter while focused in the input
+========================= -->
+<div class="vexara-modal" id="vexaraHelloModal" aria-hidden="true">
+  <div class="vexara-modal__backdrop" data-vexara-close></div>
+
+  <div class="vexara-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="vexaraHelloTitle">
+    <button class="vexara-modal__close" type="button" aria-label="Close popup" data-vexara-close>
+      ×
+    </button>
+
+    <h2 class="vexara-modal__title" id="vexaraHelloTitle">Maa chuda le bhenchod</h2>
+  </div>
+</div>
+
+<script>
+/* =========================
+  VEXARA: "Hello there" Popup Component (JS)
+  - Independent, safe to delete later.
+  - Minimal assumptions about your page structure.
+  - Uses IDs/classes that won’t clash with your existing CSS.
+========================= */
+(() => {
+  // Hook into your existing CTA elements
+  const input = document.querySelector('.cta-input');
+  const button = document.querySelector('.cta-button');
+
+  // Popup elements
+  const modal = document.getElementById('vexaraHelloModal');
+  const closeTargets = modal.querySelectorAll('[data-vexara-close]');
+  const closeBtn = modal.querySelector('.vexara-modal__close');
+
+  // Utility: open modal
+  const openModal = () => {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+
+    // Focus close button for accessibility/keyboard users
+    closeBtn.focus();
+  };
+
+  // Utility: close modal
+  const closeModal = () => {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+
+    // Return focus to input for a smooth UX
+    input?.focus();
+  };
+
+  // Trigger: clicking "Enter"
+  button?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+
+  // Trigger: pressing Enter in the input
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      openModal();
+    }
+  });
+
+  // Close: click backdrop or close button
+  closeTargets.forEach((el) => el.addEventListener('click', closeModal));
+
+  // Close: Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+})();
+</script>
+<!-- =========================
+  END VEXARA POPUP COMPONENT
+========================= -->
+
 
 </body>
 </html>
